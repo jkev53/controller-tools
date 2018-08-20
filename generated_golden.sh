@@ -26,6 +26,7 @@ ln -s ../vendor vendor
 ../bin/controller-scaffold api --group creatures --version v2alpha1 --kind Kraken --namespaced=false --example=false --controller=true --resource=true --make=false
 ../bin/controller-scaffold api --group core --version v1 --kind Namespace --example=false --controller=true --resource=false --namespaced=false
 ../bin/controller-scaffold api --group policy --version v1beta1 --kind HealthCheckPolicy --example=false --controller=true --resource=true --namespaced=false
+# ../bin/controller-scaffold external --group starfleet --version v1beta1 --kind StarDate --example=false --controller=true --resource=true --namespaced=false
 make
 rm -rf ./bin/
 cd -
