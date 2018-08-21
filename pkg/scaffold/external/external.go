@@ -28,6 +28,12 @@ import (
 // External scaffolds a External for a Resource
 type External struct {
 	Resource *resource.Resource
+
+	// Domain the domain of the external type
+	Domain string
+
+	// ImportPath the import path of the external type
+	ImportPath string
 }
 
 // Validate checks the Resource values to make sure they are valid.

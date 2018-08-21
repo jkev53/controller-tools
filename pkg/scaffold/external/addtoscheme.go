@@ -48,8 +48,7 @@ var addResourceTemplate = `{{ .Boilerplate }}
 package apis
 
 import (
-	"log"
-	"{{ .Repo }}/pkg/apis/{{ .External.Resource.Group }}/{{ .External.Resource.Version }}"
+	// "{{ .External.ImportPath }}"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/controller-runtime/pkg/runtime/scheme"
 )
@@ -57,12 +56,12 @@ import (
 
 func init() {
 	// schemeGroupVersion is group version used to register these objects
-	schemeGroupVersion := schema.GroupVersion{Group: "mygroup.mydomain.com", Version: "v1alpha1"}
+	schemeGroupVersion := schema.GroupVersion{Group: "{{ .External.Resource.Group }}.{{ .External.Domain }}", Version: "{{ .External.Resource.Version }}"}
 
 	// schemeBuilder is used to add go types to the GroupVersionKind scheme
 	schemeBuilder := &scheme.Builder{GroupVersion: schemeGroupVersion}
-	schemeBuilder.Register(&v1alpha1.MyKind{},
-		&v1alpha1.MyKindList{})
+	schemeBuilder.Register(&{{ .External.Resource.Version }}.{{ .External.Resource.Kind }}{},
+		&{{ .External.Resource.Version }}.{{ .External.Resource.Kind }}List{})
 
 	// Register the types with the Scheme so the components can map objects 
 	// to GroupVersionKinds and back

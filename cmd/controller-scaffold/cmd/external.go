@@ -18,14 +18,13 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
+	// "os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
 	"sigs.k8s.io/controller-tools/pkg/scaffold"
-	"sigs.k8s.io/controller-tools/pkg/scaffold/controller"
 	"sigs.k8s.io/controller-tools/pkg/scaffold/external"
 	"sigs.k8s.io/controller-tools/pkg/scaffold/input"
 	"sigs.k8s.io/controller-tools/pkg/scaffold/resource"
@@ -105,30 +104,29 @@ After the scaffold is written, api will run make on the project.
 			// 	CreateExampleReconcileBody = e.CreateExampleReconcileBody,
 			// }
 			err := (&scaffold.Scaffold{}).Execute(input.Options{},
-				&controller.Controller{Resource: e.Resource},
-				&controller.AddController{Resource: e.Resource},
-				&controller.Test{Resource: e.Resource},
-				&controller.SuiteTest{Resource: e.Resource},
+				&external.Controller{External: e},
+				&external.AddController{External: e},
+				// &controller.Test{External: e},
+				// &controller.SuiteTest{External: e},
 			)
 			if err != nil {
 				log.Fatal(err)
 			}
 		}
 
-		if doMake {
-			fmt.Println("Running make...")
-			cm := exec.Command("make") // #nosec
-			cm.Stderr = os.Stderr
-			cm.Stdout = os.Stdout
-			if err := cm.Run(); err != nil {
-				log.Fatal(err)
-			}
-		}
+		// if doMake {
+		// 	fmt.Println("Running make...")
+		// 	cm := exec.Command("make") // #nosec
+		// 	cm.Stderr = os.Stderr
+		// 	cm.Stdout = os.Stdout
+		// 	if err := cm.Run(); err != nil {
+		// 		log.Fatal(err)
+		// 	}
+		// }
 	},
 }
 
 func init() {
-	fmt.Printf("hello")
 	rootCmd.AddCommand(ExternalCmd)
 	ExternalCmd.Flags().BoolVar(&doMake, "make", true,
 		"if true, run make after generating files")
@@ -158,6 +156,10 @@ func ExternalForFlags(f *flag.FlagSet) *external.External {
 	f.BoolVar(&r.Namespaced, "namespaced", true, "true if the resource is namespaced")
 	f.BoolVar(&r.CreateExampleReconcileBody, "example", true,
 		"true if an example reconcile body should be written")
+
+	f.StringVar(&e.Domain, "domain", "", "external types domain")
+	f.StringVar(&e.ImportPath, "importpath", "", "external types importPath")
+
 	e.Resource = r
 	return e
 }
