@@ -46,6 +46,9 @@ type Resource struct {
 
 	// CreateExampleReconcileBody will create a Deployment in the Reconcile example
 	CreateExampleReconcileBody bool
+
+	// ImportPath
+	ImportPath string
 }
 
 // Validate checks the Resource values to make sure they are valid.
